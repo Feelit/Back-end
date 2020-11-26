@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny
 
 # Serializers
 from feelit.users.serializers import (
-    UserModelSerialzier
+    UserModelSerializer
 )
 
 # Models
@@ -20,6 +20,6 @@ class UserViewSet(viewsets.ModelViewSet):
     """User view set."""
 
     queryset = User.objects.filter(is_active=True)
-    serializer_class = UserModelSerialzier
+    serializer_class = UserModelSerializer
     lookup_field = 'username'
     permission_classes = [AllowAny]
