@@ -24,6 +24,20 @@ Moved to settings_.
 Basic Commands
 --------------
 
+Clone in your folder and you can install and run the project with Docker and Docker-compose. Previous instalation of Docker is required.
+
+Compose file for development is local.yml, start with setting variable (in Linux and Mac, for Windows is set instead of export) 
+
+$ export COMPOSE_FILE=local.yml
+
+To install all requirements and set up the project
+$ docker-compose build
+
+To run the project and start the server
+$ docker-compose up
+
+
+
 Setting Up Your Users
 ^^^^^^^^^^^^^^^^^^^^^
 
