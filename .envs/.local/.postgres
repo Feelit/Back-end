@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=feelit
+POSTGRES_USER=sErnoyRmfhmZLOiQAGEFeIdMknvwSmwh
+POSTGRES_PASSWORD=3VitRySTmoP7BrhY394NUZkJIzMOzh02H6dinQO0XlpNtTnGJlFEYGtXGHgylgoS
