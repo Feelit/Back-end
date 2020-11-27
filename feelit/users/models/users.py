@@ -41,3 +41,4 @@ class User(FeelitModel, AbstractUser):
     def get_short_name(self):
         """ Return username."""
         return self.username
+        

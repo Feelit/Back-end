@@ -13,7 +13,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.validators import UniqueValidator
 
 # Models
-from feelit.users.models import User
+from feelit.users.models import User, Profile
+
+# Serializers
+from feelit.users.serializers.profiles import ProfileModelSerializer
 
 # Utilities
 import jwt
@@ -23,6 +26,8 @@ from datetime import timedelta
 class UserModelSerializer(serializers.ModelSerializer):
     """User model serializer."""
 
+    profile = ProfileModelSerializer(read_only=True)
+
     class Meta:
         """Meta class."""
 
@@ -31,7 +36,8 @@ class UserModelSerializer(serializers.ModelSerializer):
             'username',
             'first_name',
             'last_name',
-            'email'
+            'email',
+            'profile'
         )
 
 
@@ -70,6 +76,7 @@ class UserSignUpSerializer(serializers.Serializer):
         """ Handle user create."""
         data.pop('password_confirmation')
         user = User.objects.create_user(**data, is_verified=False)
+        Profile.objects.create(user=user)
         self.send_confirmation_email(user)
         return user
 
@@ -114,13 +121,13 @@ class UserLoginSerializer(serializers.Serializer):
 
     def validate(self, data):
         """ Validate credentials."""
-
         user = authenticate(username=data['email'], password=data['password'])
         if not user:
             raise serializers.ValidationError('Invalid Credentials')
         if not user.is_verified:
             raise serializers.ValidationError('Account is not active yet')
         self.context['user'] = user
+        return data
 
     def create(self, data):
         """ Generate new token."""
@@ -154,4 +161,3 @@ class AccountVerificationSerializer(serializers.Serializer):
         user = User.objects.get(username=payload['user'])
         user.is_verified = True
         user.save()
-        
