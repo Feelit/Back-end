@@ -8,5 +8,6 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
 
     path('', include(('feelit.users.urls', 'users'), namespace='users')),
+    path('', include(('feelit.posts.urls', 'posts'), namespace='posts')),
    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
