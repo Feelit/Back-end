@@ -1,12 +1,11 @@
 """ Posts views."""
 
-# Django
-from django.core import exceptions
-
 # Django REST Framework
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 # Models
 from feelit.posts.models import Post
@@ -15,7 +14,8 @@ from feelit.users.models import User
 # Serializers
 from feelit.posts.serializers import (
     CreatePostSerializer,
-    PostModelSerializer
+    PostModelSerializer,
+    CreateCommentPostSerializer
 )
 
 
@@ -42,13 +42,28 @@ class UserPostViewSet(viewsets.ModelViewSet):
         """ Return serializer based on action."""
         if self.action == 'create':
             return CreatePostSerializer
+        if self.action in ['comment']:
+            return CreateCommentPostSerializer
         return PostModelSerializer
 
     def get_queryset(self):
         """ Return users posts."""
         return self.user.post_set
 
+    @action(detail=True, methods=['post'])
+    def comment(self, request, *args, **kwargs):
+        """ Add new comment to the post."""
+        post = self.get_object()
+        serializer_class = CreateCommentPostSerializer
+        context = self.get_serializer_context()
+        context['post'] = post
+        serializer = serializer_class(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        post = serializer.save()
+        data = PostModelSerializer(post).data
+        return Response(data, status=status.HTTP_201_CREATED)
 
+ 
 class PostViewSet(viewsets.ModelViewSet):
     """ General Post viewset
 

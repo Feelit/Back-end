@@ -32,7 +32,6 @@ class User(FeelitModel, AbstractUser):
         help_text='Set to true when the user have verified its email.'
     )
 
-
     def __str__(self):
         """Return username."""
         return self.username

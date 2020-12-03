@@ -6,15 +6,20 @@ from rest_framework import serializers
 # Models
 from feelit.posts.models import Post
 
+# Serializer
+from feelit.posts.serializers.comments import CommentPostSerializer
+
 
 class PostModelSerializer(serializers.ModelSerializer):
     """ Post model serializer. """
+
+    comments = CommentPostSerializer(read_only=True)
 
     class Meta:
         """Meta class."""
 
         model = Post
-        fields = '__all__'
+        fields = ('user', 'profile', 'title', 'photo', 'post_rating', 'comments')
         read_only_fields = ('user', 'profile', 'post_rating')
 
 
@@ -22,7 +27,7 @@ class CreatePostSerializer(serializers.ModelSerializer):
     """Post model serializer."""
 
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
+    
     class Meta:
         """Meta Class"""
         model = Post
