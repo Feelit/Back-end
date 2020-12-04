@@ -17,7 +17,7 @@ certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
     acme:
-      email: "x-fireball@example.com"
+      email: "noreply@cridetest.ml"
       storage: /etc/traefik/acme/acme.json
       # https://docs.traefik.io/master/https/acme/#httpchallenge
       httpChallenge:
@@ -26,7 +26,7 @@ certificatesResolvers:
 http:
   routers:
     web-router:
-      rule: "Host(`example.com`) || Host(`www.example.com`)"
+      rule: "Host(`cridetest.ml`) || Host(`www.cridetest.ml`)"
       
       entryPoints:
         - web
@@ -36,7 +36,7 @@ http:
       service: django
 
     web-secure-router:
-      rule: "Host(`example.com`) || Host(`www.example.com`)"
+      rule: "Host(`cridetest.ml`) || Host(`www.cridetest.ml`)"
       
       entryPoints:
         - web-secure
@@ -48,7 +48,7 @@ http:
         certResolver: letsencrypt
 
     flower-secure-router:
-      rule: "Host(`example.com`)"
+      rule: "Host(`cridetest.ml`)"
       entryPoints:
         - flower
       service: flower
@@ -84,3 +84,4 @@ providers:
   file:
     filename: /etc/traefik/traefik.yml
     watch: true
+

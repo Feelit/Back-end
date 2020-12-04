@@ -13,7 +13,7 @@ from feelit.posts.serializers.comments import CommentPostSerializer
 class PostModelSerializer(serializers.ModelSerializer):
     """ Post model serializer. """
 
-    comments = CommentPostSerializer(read_only=True)
+    comments = CommentPostSerializer(many=True)
 
     class Meta:
         """Meta class."""
