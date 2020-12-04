@@ -12,14 +12,12 @@ from feelit.posts.serializers.comments import CommentPostSerializer
 
 class PostModelSerializer(serializers.ModelSerializer):
     """ Post model serializer. """
-
-    comments = CommentPostSerializer(many=True)
-
+  
     class Meta:
         """Meta class."""
 
         model = Post
-        fields = ('user', 'profile', 'title', 'photo', 'post_rating', 'comments')
+        fields = ('user', 'profile', 'title', 'photo', 'post_rating')
         read_only_fields = ('user', 'profile', 'post_rating')
 
 
