@@ -72,3 +72,8 @@ class CommentPostSerializer(serializers.ModelSerializer):
         """ Meta Class."""
         model = Comment
         fields = ('text', 'from_user', 'comment_rating')
+
+    def to_representation(self, instance):
+        representation = super(CommentPostSerializer, self).to_representation(instance)
+        representation['from_user'] = instance.from_user.username
+        return representation
