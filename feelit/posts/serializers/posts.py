@@ -32,12 +32,11 @@ class CreatePostSerializer(serializers.ModelSerializer):
     """Post model serializer."""
 
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    comments = serializers.StringRelatedField(many=True)
     
     class Meta:
         """Meta Class"""
         model = Post
-        fields = ('user', 'title', 'photo', 'profile', 'comments')
+        fields = ('user', 'title', 'photo', 'profile')
         read_only_fields = ('user', 'profile', 'post_rating')
 
     def validate(self, data):
