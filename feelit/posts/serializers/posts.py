@@ -12,24 +12,32 @@ from feelit.posts.serializers.comments import CommentPostSerializer
 
 class PostModelSerializer(serializers.ModelSerializer):
     """ Post model serializer. """
-  
+
+    comments = CommentPostSerializer(many=True)
+
     class Meta:
         """Meta class."""
 
         model = Post
-        fields = ('user', 'profile', 'title', 'photo', 'post_rating')
-        read_only_fields = ('user', 'profile', 'post_rating')
+        fields = ('id', 'user', 'profile', 'title', 'photo', 'post_rating', 'comments')
+        read_only_fields = ('id','user', 'profile', 'post_rating')
 
+    def to_representation(self, instance):
+        representation = super(PostModelSerializer, self).to_representation(instance)
+        representation['user'] = instance.user.username
+        return representation
+        
 
 class CreatePostSerializer(serializers.ModelSerializer):
     """Post model serializer."""
 
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    comments = serializers.StringRelatedField(many=True)
     
     class Meta:
         """Meta Class"""
         model = Post
-        fields = ('user', 'title', 'photo', 'profile')
+        fields = ('user', 'title', 'photo', 'profile', 'comments')
         read_only_fields = ('user', 'profile', 'post_rating')
 
     def validate(self, data):

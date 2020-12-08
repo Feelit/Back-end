@@ -14,7 +14,8 @@ class Comment(FeelitModel):
     The text in the comments would be rated by sentiment analysis.
     """
 
-    post = models.ForeignKey('posts.Post', on_delete=models.CASCADE)
+    post = models.ForeignKey('posts.Post', on_delete=models.CASCADE, related_name='comments')
+
     from_user = models.ForeignKey(
         'users.User',
         on_delete=models.SET_NULL,
