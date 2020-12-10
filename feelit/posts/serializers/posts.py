@@ -52,7 +52,7 @@ class CreatePostSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, data):
-        """ Create ride."""
+        """ Create post."""
         user = data['user']
         profile = user.profile
         post = Post.objects.create(**data, profile=profile)

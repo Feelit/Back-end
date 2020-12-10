@@ -24,7 +24,7 @@ class User(FeelitModel, AbstractUser):
     )
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['username', 'name']
 
     is_verified = models.BooleanField(
         'verified',
