@@ -8,19 +8,24 @@ from rest_framework import serializers
 
 # Models
 from feelit.users.models import User
-from feelit.posts.models import Post, Comment
+from feelit.posts.models import Post, Comment, Sentiment
+
+# Utilities
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 
 class CreateCommentPostSerializer(serializers.ModelSerializer):
     """Create comments serializer."""
 
-    comment_rating = serializers.IntegerField(default=5)
     text = serializers.CharField()
 
     class Meta:
         """Meta class."""
         model = Comment
         fields = ('text', 'comment_rating')
+        readonlyfields = ('comment_rating')
 
     def validate(self, data):
         """ Validate user is logged and active."""
@@ -32,11 +37,18 @@ class CreateCommentPostSerializer(serializers.ModelSerializer):
     def create(self, data):
         """ Create comment."""
         for_user = self.context['post'].user
-        
+
+        rating = self.get_analysis(data)
+
+        #rating = Sentiment.objects.filter(
+        #    comment=self.context['comment']
+        #)['polarity']
+
         Comment.objects.create(
             post=self.context['post'],
             from_user=self.context['request'].user,
             for_user=for_user,
+            comment_rating=rating,
             **data
         )
 
@@ -63,6 +75,24 @@ class CreateCommentPostSerializer(serializers.ModelSerializer):
         for_user.profile.save()
 
         return self.context['post']
+
+    def get_analysis(self, data):
+        """ Get data sentiment analysis. """
+        text = self.data['text']
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('https://', adapter)
+        response = session.get('https://sentimentapi-oqblqthtkq-ue.a.run.app/api/v1/analyzer/?comment=' + text)
+        analysis = response.json()
+        polarity = analysis['polarity']
+        subjectivity = analysis['subjectivity']
+
+        #Sentiment.objects.create(
+        #    polarity=polarity,
+        #    subjetivity=subjectivity
+        #)
+        return polarity
 
 
 class CommentPostSerializer(serializers.ModelSerializer):

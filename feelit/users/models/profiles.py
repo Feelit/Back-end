@@ -25,7 +25,7 @@ class Profile(FeelitModel):
 
     # Stats
     profile_rating = models.FloatField(
-        default=5.0,
+        default=0.0,
         help_text="Feelings overall rating based on post results")
 
     def __str__(self):
