@@ -76,14 +76,15 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
 AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
-AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default=None)
+AWS_S3_ENDPOINT_URL = env("DJANGO_AWS_S3_ENDPOINT_URL", default=None)
 aws_s3_domain = AWS_S3_CUSTOM_DOMAIN
+AWS_S3_USE_SSL = True
 # STATIC
 # ------------------------
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "storages.backends.s3boto3.s3Boto3Storage"
 # MEDIA
 # ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = "feelit.utils.storages.MediaRootS3Boto3Storage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.s3Boto3Storage"
 MEDIA_URL = f"https://{aws_s3_domain}/"
 
 # TEMPLATES
